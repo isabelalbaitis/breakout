@@ -14,7 +14,7 @@ HEIGHT = 50
 
 class Brick(pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface([WIDTH, HEIGHT])
         self.image.fill(COLOR)
 

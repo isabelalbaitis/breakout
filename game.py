@@ -15,6 +15,7 @@ paddle = Paddle(BLACK)
 
 bricks = pygame.sprite.Group()
 
+
 all_sprites = pygame.sprite.Group()
 
 all_sprites.add(paddle)
@@ -24,20 +25,23 @@ class Game():
 	def __init__(self):
 		paddle.rect.x = 450
 		paddle.rect.y = 550
-		self.get_bricks()
+
+		brk = Brick()
+		brk.__init__()
+		for j in range(0, 300, 50):
+			for i in range(0, 900, 100):
+				brk = Brick()
+				brk.rect.x = i
+				brk.rect.y = j
+				bricks.add(brk)
+
+		all_sprites.add(bricks)
 		self.game()
 
 	def draw_window(self):
 		WINDOW.fill(WHITE)
 		all_sprites.draw(WINDOW)
 		pygame.display.update()
-
-	def get_bricks(self):
-		brick_row = []
-		for b in brick_row:
-			b = Brick()
-			bricks.add(b)
-		all_sprites.add(bricks)
 
 
 	def game(self):
