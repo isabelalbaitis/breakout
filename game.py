@@ -1,9 +1,10 @@
 import pygame
 from paddle import Paddle
 from brick import Brick
+from ball import Ball
 import random
 
-WIDTH, HEIGHT = 1010,610
+WIDTH, HEIGHT = 1000,600
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Breakout")
 
@@ -13,23 +14,25 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 paddle = Paddle(BLACK)
+ball = Ball()
 
 bricks = pygame.sprite.Group()
-
-
 all_sprites = pygame.sprite.Group()
-
-all_sprites.add(paddle)
-
 
 class Game():
 	def __init__(self):
+		# Places paddle in initial placement
 		paddle.rect.x = 450
 		paddle.rect.y = 550
 
+		# Starts ball below the bricks all the way to the left
+		ball.rect.x = 2
+		ball.rect.y = 320
+
+		# Sets up bricks with random colors on the board
 		random.seed(1)
-		for j in range(1, 300, 52):
-			for i in range(1, 1000, 102):
+		for j in range(0, 300, 50):
+			for i in range(1, 1000, 100):
 				r = random.randint(0,255)
 				g = random.randint(0,255)
 				b = random.randint(0,255)
@@ -41,12 +44,41 @@ class Game():
 				bricks.add(brk)
 
 		all_sprites.add(bricks)
+		all_sprites.add(paddle)
+		all_sprites.add(ball)
 		self.game()
 
 	def draw_window(self):
 		WINDOW.fill(WHITE)
 		all_sprites.draw(WINDOW)
 		pygame.display.update()
+
+		# Checks if ball bounces against side walls
+		if ball.rect.x >= 1000 or ball.rect.x <= 0:
+			ball.velocity[0] = -ball.velocity[0]
+		# Checks if ball bounces against ceiling
+		if ball.rect.y < 0:
+			ball.velocity[1] = -ball.velocity[1]
+		# Checks if ball hits the floor
+		if ball.rect.y > 550:
+			ball.velocity[0] = 0
+			ball.velocity[1] = 0
+
+		# Checks if ball collided with paddle
+		if pygame.sprite.collide_mask(ball, paddle):
+			ball.rect.x -= ball.velocity[0]
+			ball.rect.y -= ball.velocity[1]
+			ball.bounce()
+
+		# Checks if ball collided with a brick
+		bricks_to_hit = pygame.sprite.spritecollide(ball, bricks, False)
+		for brick in bricks_to_hit:
+			ball.bounce()
+			brick.hit()
+
+
+		# Updates ball position
+		ball.update()
 
 
 	def game(self):

@@ -1,5 +1,4 @@
 import pygame
-import random
 
 WIDTH = 100
 HEIGHT = 50
@@ -7,9 +6,9 @@ HEIGHT = 50
 class Brick(pygame.sprite.Sprite):
     def __init__(self, red_val, grn_val, blu_val):
         pygame.sprite.Sprite.__init__(self)
-        self.RED_VAL = red_val
-        self.GRE_VAL = grn_val
-        self.BLU_VAL = blu_val
+        self.RED = red_val
+        self.GRE = grn_val
+        self.BLU = blu_val
 
         self.HEALTH = 766 - (red_val + grn_val + blu_val)
         self.COLOR = (red_val, grn_val, blu_val)
@@ -19,3 +18,14 @@ class Brick(pygame.sprite.Sprite):
 
         pygame.draw.rect(self.image, self.COLOR, [0,0,WIDTH,HEIGHT])
         self.rect = self.image.get_rect()
+
+    def hit(self):
+        self.HEALTH -= 25
+        if self.HEALTH <= 0:
+            pygame.sprite.Sprite.kill()
+        else:
+            self.RED -= 8
+            self.GRE -= 8
+            self.BLU -= 8
+            self.COLOR = (self.RED, self.GRE, self.BLU)
+            self.image.fill(self.COLOR)
