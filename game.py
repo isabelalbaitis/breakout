@@ -1,8 +1,9 @@
 import pygame
 from paddle import Paddle
 from brick import Brick
+import random
 
-WIDTH, HEIGHT = 1000,600
+WIDTH, HEIGHT = 1010,610
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Breakout")
 
@@ -26,13 +27,17 @@ class Game():
 		paddle.rect.x = 450
 		paddle.rect.y = 550
 
-		brk = Brick()
-		brk.__init__()
-		for j in range(0, 300, 50):
-			for i in range(0, 900, 100):
-				brk = Brick()
-				brk.rect.x = i
-				brk.rect.y = j
+		random.seed(1)
+		for j in range(1, 300, 52):
+			for i in range(1, 1000, 102):
+				r = random.randint(0,255)
+				g = random.randint(0,255)
+				b = random.randint(0,255)
+
+				brk = Brick(r,g,b)
+
+				brk.rect.x = i - 1
+				brk.rect.y = j - 1
 				bricks.add(brk)
 
 		all_sprites.add(bricks)
