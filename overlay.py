@@ -1,19 +1,21 @@
 import pygame
 
+pygame.init()
+
 SCORE = 0
 LIVES = 5
 WIDTH = 1000
 HEIGHT = 600
 WHITE = (255,255,255)
-LABEL_FONT = pygame.font.SysFont('helvetica',30)
+LABEL_FONT = pygame.font.SysFont('freesansbold.ttf',30)
 
 class Overlay():
     def __init__(self, game):
         score_label = LABEL_FONT.render('Score:', True, WHITE)
         lives_label = LABEL_FONT.render('Lives:', True, WHITE)
 
-        game.get_window.blit(score_label,(20,20))
-        game.get_window.blit(lives_label,(20,20))
+        game.get_window().blit(score_label,(20,20))
+        game.get_window().blit(lives_label,(20,20))
         pygame.display.update()
 
 
