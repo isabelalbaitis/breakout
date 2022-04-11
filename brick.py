@@ -19,13 +19,16 @@ class Brick(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, self.COLOR, [0,0,WIDTH,HEIGHT])
         self.rect = self.image.get_rect()
 
+    # Returns true on kill
     def hit(self):
         self.HEALTH -= 25
         if self.HEALTH <= 0:
             pygame.sprite.Sprite.kill()
+            return True
         else:
             self.RED -= 8
             self.GRE -= 8
             self.BLU -= 8
             self.COLOR = (self.RED, self.GRE, self.BLU)
             self.image.fill(self.COLOR)
+            return False

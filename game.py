@@ -2,6 +2,7 @@ import pygame
 from paddle import Paddle
 from brick import Brick
 from ball import Ball
+from overlay import Overlay
 import random
 
 WIDTH, HEIGHT = 1000,600
@@ -20,6 +21,7 @@ bricks = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
 class Game():
+
 	def __init__(self):
 		# Places paddle in initial placement
 		paddle.rect.x = 450
@@ -46,6 +48,9 @@ class Game():
 		all_sprites.add(bricks)
 		all_sprites.add(paddle)
 		all_sprites.add(ball)
+
+		self.overlay = Overlay(self)
+
 		self.game()
 
 	def draw_window(self):
@@ -63,6 +68,7 @@ class Game():
 		if ball.rect.y > 550:
 			ball.velocity[0] = 0
 			ball.velocity[1] = 0
+			self.overlay.set_lives(self.overlay.get_lives() - 1)
 
 		# Checks if ball collided with paddle
 		if pygame.sprite.collide_mask(ball, paddle):
@@ -74,12 +80,15 @@ class Game():
 		bricks_to_hit = pygame.sprite.spritecollide(ball, bricks, False)
 		for brick in bricks_to_hit:
 			ball.bounce()
-			brick.hit()
+			if brick.hit() == True:
+				self.OVERLAY.SCORE += 1
 
 
 		# Updates ball position
 		ball.update()
 
+	def get_window(self):
+		return WINDOW
 
 	def game(self):
 		clock = pygame.time.Clock()
