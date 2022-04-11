@@ -16,6 +16,7 @@ BLACK = (0, 0, 0)
 
 paddle = Paddle(BLACK)
 ball = Ball()
+overlay = Overlay()
 
 bricks = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
@@ -48,8 +49,7 @@ class Game():
 		all_sprites.add(bricks)
 		all_sprites.add(paddle)
 		all_sprites.add(ball)
-
-		self.overlay = Overlay(self)
+		all_sprites.add(overlay)
 
 		self.game()
 
@@ -68,7 +68,7 @@ class Game():
 		if ball.rect.y > 550:
 			ball.velocity[0] = 0
 			ball.velocity[1] = 0
-			self.overlay.set_lives(self.overlay.get_lives() - 1)
+			overlay.dec_lives()
 
 		# Checks if ball collided with paddle
 		if pygame.sprite.collide_mask(ball, paddle):
@@ -81,8 +81,7 @@ class Game():
 		for brick in bricks_to_hit:
 			ball.bounce()
 			if brick.hit() == True:
-				self.OVERLAY.SCORE += 1
-
+				overlay.inc_score()
 
 		# Updates ball position
 		ball.update()
@@ -99,6 +98,7 @@ class Game():
 				# Quit if user hits close
 				if event.type == pygame.QUIT:
 					run = False
+
 
 			# Responding to keystrokes
 			keystroke = pygame.key.get_pressed()
