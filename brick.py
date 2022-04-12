@@ -27,7 +27,7 @@ class Brick(pygame.sprite.Sprite):
     def hit(self):
         self.health -= 25
         if self.health <= 0:
-            pygame.sprite.Sprite.kill()
+            pygame.sprite.Sprite.kill(self)
             return True
         else:
             self.red -= self.red_subtr

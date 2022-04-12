@@ -13,11 +13,14 @@ FPS = 60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREEN = (0,255,0)
+RED = (255,0,0)
 
 paddle = Paddle(BLACK)
 ball = Ball()
 overlay = Overlay()
 
+overlay_group = pygame.sprite.Group()
 bricks = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
@@ -25,7 +28,7 @@ class Game():
 
 	def __init__(self):
 		# Places paddle in initial placement
-		paddle.rect.x = 450
+		paddle.rect.x = 400
 		paddle.rect.y = 550
 
 		# Starts ball below the bricks all the way to the left
@@ -51,6 +54,7 @@ class Game():
 		all_sprites.add(ball)
 		all_sprites.add(overlay)
 
+		self.active = True
 		self.game()
 
 	def draw_window(self):
@@ -61,14 +65,19 @@ class Game():
 		# Checks if ball bounces against side walls
 		if ball.rect.x >= 1000 or ball.rect.x <= 0:
 			ball.velocity[0] = -ball.velocity[0]
+
 		# Checks if ball bounces against ceiling
 		if ball.rect.y < 0:
 			ball.velocity[1] = -ball.velocity[1]
+
 		# Checks if ball hits the floor
-		if ball.rect.y > 550:
+		if ball.rect.y > 560:
+			ball.rect.y = 320
+			ball.rect.x = 2
 			ball.velocity[0] = 0
 			ball.velocity[1] = 0
-			overlay.dec_lives()
+
+			self.new_life()
 
 		# Checks if ball collided with paddle
 		if pygame.sprite.collide_mask(ball, paddle):
@@ -79,6 +88,8 @@ class Game():
 		# Checks if ball collided with a brick
 		bricks_to_hit = pygame.sprite.spritecollide(ball, bricks, False)
 		for brick in bricks_to_hit:
+			ball.rect.x -= ball.velocity[0]
+			ball.rect.y -= ball.velocity[1]
 			ball.bounce()
 			if brick.hit() == True:
 				overlay.inc_score()
@@ -86,12 +97,31 @@ class Game():
 		# Updates ball position
 		ball.update()
 
-	def get_window(self):
-		return WINDOW
+		# Updates overlay
+		overlay.update()
+
+		pygame.display.flip()
+		pygame.display.update()
+
+	def new_life(self):
+		if overlay.get_lives() > 1:
+			overlay.dec_lives()
+			pygame.time.delay(1000)
+			ball.velocity[0] = random.randint(4, 8)
+			ball.velocity[1] = random.randint(1, 8)
+
+		else:
+			font = pygame.font.Font(None, 70)
+			game_over_text = font.render("GAME OVER ", 1, RED)
+			WINDOW.blit(game_over_text, (350, 225))
+			self.active = False
+
+
 
 	def game(self):
 		clock = pygame.time.Clock()
 		run = True
+
 		while run:
 			clock.tick(FPS)
 			for event in pygame.event.get():
@@ -107,7 +137,8 @@ class Game():
 			if keystroke[pygame.K_LEFT] or keystroke[pygame.K_a]:
 				paddle.moveLeft()
 
-			self.draw_window()
+			if self.active:
+				self.draw_window()
 
 		pygame.quit()
 

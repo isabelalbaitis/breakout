@@ -16,7 +16,7 @@ class Ball(pygame.sprite.Sprite):
         # Velocity of the ball
         # First value is x-direction velocity
         # Second value is y-direction velocity
-        self.velocity = [random.randint(4,8), random.randint(1,6)]
+        self.velocity = [random.randint(2,4), random.randint(1,4)]
 
         self.rect = self.image.get_rect()
 
@@ -27,3 +27,7 @@ class Ball(pygame.sprite.Sprite):
     def bounce(self):
         self.velocity[0] = -self.velocity[0]
         self.velocity[1] = random.randint(-8,8)
+
+        # Prevents ball from bouncing across screen infinitely
+        while self.velocity[1] == 0:
+            self.velocity[1] = random.randint(-8,8)
