@@ -1,4 +1,5 @@
 import pygame
+
 from paddle import Paddle
 from brick import Brick
 from ball import Ball
@@ -27,6 +28,10 @@ all_sprites = pygame.sprite.Group()
 class Game():
 
 	def __init__(self):
+		pygame.mixer.init()
+		pygame.mixer.music.load("Nicki Minaj- SuperBass (Studio Acapella).mp3")
+		pygame.mixer.music.play(100,0.0,0)
+
 		# Places paddle in initial placement
 		paddle.rect.x = 400
 		paddle.rect.y = 550

@@ -4,6 +4,7 @@ import random
 BLACK = (0,0,0)
 WIDTH = 10
 HEIGHT = 10
+CENTER = (5,5)
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -11,7 +12,8 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.Surface([WIDTH, HEIGHT])
         self.image.fill(BLACK)
 
-        pygame.draw.rect(self.image, BLACK, [0,0,WIDTH,HEIGHT])
+     #   pygame.draw.rect(self.image, BLACK, [0,0,WIDTH,HEIGHT])
+        pygame.draw.circle(self.image, BLACK, CENTER, 5)
 
         # Velocity of the ball
         # First value is x-direction velocity
@@ -19,6 +21,7 @@ class Ball(pygame.sprite.Sprite):
         self.velocity = [random.randint(2,4), random.randint(1,4)]
 
         self.rect = self.image.get_rect()
+        self.rect.center = CENTER
 
     def update(self):
         self.rect.x += self.velocity[0]
