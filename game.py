@@ -63,7 +63,7 @@ class Game():
 		pygame.display.update()
 
 		# Checks if ball bounces against side walls
-		if ball.rect.x >= 1000 or ball.rect.x <= 0:
+		if ball.rect.x >= 990 or ball.rect.x <= 0:
 			ball.velocity[0] = -ball.velocity[0]
 
 		# Checks if ball bounces against ceiling
@@ -76,7 +76,7 @@ class Game():
 			ball.rect.x = 2
 			ball.velocity[0] = 0
 			ball.velocity[1] = 0
-
+			#overlay.dec_lives()
 			self.new_life()
 
 		# Checks if ball collided with paddle
